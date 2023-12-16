@@ -11,7 +11,7 @@ jobs:
 
     env:
       AWS_REGION: ap-south-1
-      LOCAL_FOLDER: ./frontend/out/
+      LOCAL_FOLDER: frontend/out
       S3_BUCKET: bettermort/
 
     steps:
