@@ -56,3 +56,9 @@
   ```
 
 - Push changes to `main` branch - the GHA will sync the `out` folder to the S3 bucket
+
+##
+
+# Output
+
+http://bettermort.s3-website.ap-south-1.amazonaws.com/
