@@ -3,7 +3,7 @@
 - Run terraform commands
 
   ```
-  export AWS_PROFILE={aws_profile_name} (or change values in provider.tf)
+  export AWS_PROFILE={aws_profile_name}
   terraform init
   terraform plan
   terraform apply
