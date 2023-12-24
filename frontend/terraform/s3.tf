@@ -16,10 +16,6 @@ resource "aws_s3_bucket_ownership_controls" "s3_bucket_acl_ownership" {
   depends_on = [aws_s3_bucket_public_access_block.static_bucket]
 }
 
-resource "aws_iam_user" "static_bucket" {
-  name = "bettermort"
-}
-
 resource "aws_s3_bucket_public_access_block" "static_bucket" {
   bucket = aws_s3_bucket.static_bucket.id
 

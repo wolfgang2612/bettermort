@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket = "terraform-state-bettermort"
+    bucket = "tfstate-bettermort-frontend"
     key    = "tf-state"
     region = "ap-south-1"
   }
