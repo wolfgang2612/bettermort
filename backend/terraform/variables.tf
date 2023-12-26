@@ -7,6 +7,14 @@ variable "websocket_routes" {
     {
       route_key     = "$disconnect"
       function_name = "bettermort_disconnect_lambda"
+    },
+    {
+      route_key     = "$default"
+      function_name = "bettermort_default_lambda"
+    },
+    {
+      route_key     = "get_state"
+      function_name = "bettermort_get_state_lambda"
     }
   ]
 }
