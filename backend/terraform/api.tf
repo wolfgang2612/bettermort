@@ -72,7 +72,7 @@ resource "aws_apigatewayv2_route_response" "route_responses" {
   route_response_key = "$default"
 }
 
-resource "aws_apigatewayv2_deployment" "example" {
+resource "aws_apigatewayv2_deployment" "deployment" {
   api_id      = aws_apigatewayv2_api.websocket_api.id
   description = "Bettermort deployment"
   depends_on  = [aws_apigatewayv2_route.routes, aws_apigatewayv2_integration.integration, aws_apigatewayv2_route_response.route_responses]
