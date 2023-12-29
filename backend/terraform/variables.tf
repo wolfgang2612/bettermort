@@ -18,3 +18,13 @@ variable "websocket_routes" {
     }
   ]
 }
+
+variable "throttling_burst_limit" {
+  type    = number
+  default = 5
+}
+
+variable "throttling_rate_limit" {
+  type    = number
+  default = 10
+}

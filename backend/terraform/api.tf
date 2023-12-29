@@ -7,6 +7,11 @@ resource "aws_apigatewayv2_api" "websocket_api" {
 resource "aws_apigatewayv2_stage" "api_stage" {
   api_id = aws_apigatewayv2_api.websocket_api.id
   name   = "bettermort-stage"
+
+  default_route_settings {
+    throttling_burst_limit = var.throttling_burst_limit
+    throttling_rate_limit  = var.throttling_rate_limit
+  }
 }
 
 data "aws_iam_policy_document" "assume_role" {
@@ -25,6 +30,12 @@ data "aws_iam_policy_document" "assume_role" {
 resource "aws_iam_role" "iam_for_lambda" {
   name               = "iam_for_lambda"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
+}
+
+
+resource "aws_iam_role_policy_attachment" "lambda_execution_policy" {
+  role       = aws_iam_role.iam_for_lambda.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
 data "archive_file" "lambda" {
@@ -46,6 +57,14 @@ resource "aws_lambda_function" "websocket_functions" {
 
   source_code_hash = data.archive_file.lambda[each.key].output_base64sha256
   runtime          = "python3.8"
+}
+
+resource "aws_lambda_permission" "lambda_permissions" {
+  for_each      = { for idx, value in var.websocket_routes : idx => value }
+  statement_id  = "AllowAPIGatewayInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.websocket_functions[each.key].function_name
+  principal     = "apigateway.amazonaws.com"
 }
 
 resource "aws_apigatewayv2_integration" "integration" {
