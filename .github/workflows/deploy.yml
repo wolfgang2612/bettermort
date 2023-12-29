@@ -28,11 +28,11 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Build the App
-        - uses: actions/setup-node@v4
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-        - run: npm ci
-        - run: npm run build
+        run: npm ci
+        run: npm run build
 
       - name: Sync to S3
         run: |
