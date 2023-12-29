@@ -14,7 +14,7 @@ jobs:
     env:
       AWS_REGION: ap-south-1
       FRONTEND_FOLDER: frontend
-      LOCAL_FOLDER: ${{ env.FRONTEND_FOLDER }}/out
+      BUILD_FOLDER: out
       S3_BUCKET: bettermort/
 
     steps:
@@ -34,4 +34,4 @@ jobs:
 
       - name: Sync to S3
         run: |
-          aws s3 sync ${{ env.LOCAL_FOLDER }} s3://${{ env.S3_BUCKET }}
+          aws s3 sync ${{ env.FRONTEND_FOLDER }}/${{ env.BUILD_FOLDER }} s3://${{ env.S3_BUCKET }}
