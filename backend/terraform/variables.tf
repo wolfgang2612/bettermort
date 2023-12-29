@@ -13,6 +13,14 @@ variable "websocket_routes" {
       function_name = "default"
     },
     {
+      route_key     = "create_lobby"
+      function_name = "create_lobby"
+    },
+    {
+      route_key     = "join_lobby"
+      function_name = "join_lobby"
+    },
+    {
       route_key     = "get_state"
       function_name = "get_state"
     }
