@@ -4,7 +4,7 @@ import Paper from "@mui/material/Paper";
 export default function Home() {
   return (
     <Paper elevation={3}>
-      <Typography>test change</Typography>
+      <Typography>test change hello</Typography>
     </Paper>
   );
 }
