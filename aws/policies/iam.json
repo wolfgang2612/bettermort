@@ -6,16 +6,20 @@
       "Effect": "Allow",
       "Action": [
         "iam:GetRole",
+        "iam:UpdateAssumeRolePolicy",
+        "iam:CreateRole",
+        "iam:DeleteRole",
+        "iam:AttachRolePolicy",
+        "iam:PutRolePolicy",
         "iam:ListInstanceProfilesForRole",
         "iam:PassRole",
         "iam:DetachRolePolicy",
         "iam:ListAttachedRolePolicies",
-        "iam:CreateRole",
-        "iam:DeleteRole",
-        "iam:AttachRolePolicy",
-        "iam:ListRolePolicies"
+        "iam:DeleteRolePolicy",
+        "iam:ListRolePolicies",
+        "iam:GetRolePolicy"
       ],
-      "Resource": "arn:aws:iam::647256487653:role/bettermort*"
+      "Resource": "arn:aws:iam::{account_id}:role/bettermort*"
     }
   ]
 }

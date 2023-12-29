@@ -2,15 +2,16 @@
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Sid": "VisualEditor0",
       "Effect": "Allow",
       "Action": "apigateway:GET",
-      "Resource": "arn:aws:apigateway:*::/apis/*"
+      "Resource": [
+        "arn:aws:apigateway:*::/apis/*",
+        "arn:aws:apigateway:*::/account"
+      ]
     },
     {
-      "Sid": "VisualEditor1",
       "Effect": "Allow",
-      "Action": ["apigateway:POST", "apigateway:PATCH"],
+      "Action": ["apigateway:POST"],
       "Resource": [
         "arn:aws:apigateway:*::/apis",
         "arn:aws:apigateway:*::/apis/*/stages",
@@ -21,12 +22,20 @@
       ]
     },
     {
-      "Sid": "VisualEditor2",
       "Effect": "Allow",
-      "Action": ["apigateway:DELETE", "apigateway:PATCH"],
+      "Action": ["apigateway:DELETE"],
       "Resource": [
         "arn:aws:apigateway:*::/apis/*",
         "arn:aws:apigateway:*::/apis/*/deployments/*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": ["apigateway:PATCH"],
+      "Resource": [
+        "arn:aws:apigateway:*::/apis/*",
+        "arn:aws:apigateway:*::/account",
+        "arn:aws:apigateway:*::/apis/*/stages/*"
       ]
     }
   ]

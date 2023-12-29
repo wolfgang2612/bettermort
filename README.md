@@ -11,6 +11,8 @@
 
   `It is vital to create resources starting with the name 'bettermort' - the policies are granular to the extent of checking arnlike starting with 'bettermort*'`
 
+  `Replace account_id with actual account ID`
+
 - Create access key for this user and store it in the `~/.aws/credentials` file under the appropriate profile name (not the best practice, but its ok for now)
 
 - Run terraform commands
