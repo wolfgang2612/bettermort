@@ -1,0 +1,20 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "VisualEditor0",
+      "Effect": "Allow",
+      "Action": [
+        "lambda:CreateFunction",
+        "lambda:AddPermission",
+        "lambda:ListVersionsByFunction",
+        "lambda:GetFunction",
+        "lambda:DeleteFunction",
+        "lambda:RemovePermission",
+        "lambda:GetFunctionCodeSigningConfig",
+        "lambda:GetPolicy"
+      ],
+      "Resource": "arn:aws:lambda:*:647256487653:function:bettermort*"
+    }
+  ]
+}

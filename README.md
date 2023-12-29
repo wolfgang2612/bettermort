@@ -2,47 +2,14 @@
 
 - Create S3 bucket for terraform state management
 
-  `terraform-state-bettermort`
-
-- Create IAM user with the following permissions:
-
-  S3 policy:
-
   ```
-      {
-          "Version": "2012-10-17",
-          "Statement": [
-              {
-                  "Effect": "Allow",
-                  "Action": [
-                      "s3:*"
-                  ],
-                  "Resource": [
-                      "arn:aws:s3:::bettermort",
-                      "arn:aws:s3:::terraform-state-bettermort",
-                      "arn:aws:s3:::bettermort/*",
-                      "arn:aws:s3:::terraform-state-bettermort/*"
-                  ]
-              }
-          ]
-      }
+  tfstate-bettermort-backend
+  tfstate-bettermort-frontend
   ```
 
-  IAM policy:
+- Create IAM user with policies in aws_init/policies folder
 
-  ```
-    {
-        "Version": "2012-10-17",
-        "Statement": [
-            {
-                "Sid": "VisualEditor0",
-                "Effect": "Allow",
-                "Action": "iam:GetUser",
-                "Resource": "arn:aws:iam::{account_id}:user/bettermort"
-            }
-        ]
-    }
-  ```
+  `It is vital to create resources starting with the name 'bettermort' - the policies are granular to the extent of checking arnlike starting with 'bettermort*'`
 
 - Create access key for this user and store it in the `~/.aws/credentials` file under the appropriate profile name (not the best practice, but its ok for now)
 
@@ -55,7 +22,7 @@
   terraform apply
   ```
 
-- Push changes to `main` branch - the GHA will sync the `out` folder to the S3 bucket
+- Push changes to `main` branch - the GHA will sync the `frontend/out` folder to the S3 bucket
 
 ##
 

@@ -1,0 +1,21 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "VisualEditor0",
+      "Effect": "Allow",
+      "Action": [
+        "iam:GetRole",
+        "iam:ListInstanceProfilesForRole",
+        "iam:PassRole",
+        "iam:DetachRolePolicy",
+        "iam:ListAttachedRolePolicies",
+        "iam:CreateRole",
+        "iam:DeleteRole",
+        "iam:AttachRolePolicy",
+        "iam:ListRolePolicies"
+      ],
+      "Resource": "arn:aws:iam::647256487653:role/bettermort*"
+    }
+  ]
+}
