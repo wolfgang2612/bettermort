@@ -24,7 +24,7 @@
   terraform apply
   ```
 
-- Push changes to `main` branch - the GHA will sync the `frontend/out` folder to the S3 bucket
+- Push changes to `main` branch - the GHA will sync the `frontend/out` folder to the S3 bucket. Use the same access key and secret access key in Github secrets for this action.
 
 ##
 
