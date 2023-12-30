@@ -7,7 +7,7 @@
   tfstate-bettermort-frontend
   ```
 
-- Create IAM user with policies in aws_init/policies folder
+- Create IAM user with policies in aws/policies folder
 
   `It is vital to create resources starting with the name 'bettermort' - the policies are granular to the extent of checking arnlike starting with 'bettermort*'`
 
