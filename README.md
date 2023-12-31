@@ -1,19 +1,19 @@
 # How to deploy
 
-- Create S3 bucket for terraform state management
+- Create S3 buckets for terraform state management.
 
   ```
   tfstate-bettermort-backend
   tfstate-bettermort-frontend
   ```
 
-- Create IAM user with policies in aws/policies folder
+- Create IAM user with policies in aws/policies folder.
 
-  `It is vital to create resources starting with the name 'bettermort' - the policies are granular to the extent of checking arnlike starting with 'bettermort*'`
+  - > :warning: It is vital to create resources starting with the name 'bettermort' - the policies are granular to the extent of checking arnlike starting with 'bettermort'.
 
-  `Replace account_id with actual account ID`
+  - Replace account_id with actual account ID.
 
-- Create access key for this user and store it in the `~/.aws/credentials` file under the appropriate profile name (not the best practice, but its ok for now)
+- Create access key for this user and store it in the `~/.aws/credentials` file under the appropriate profile name.
 
 - Run terraform commands
 
@@ -24,7 +24,7 @@
   terraform apply
   ```
 
-- Push changes to `main` branch - the GHA will sync the `frontend/out` folder to the S3 bucket. Use the same access key and secret access key in Github secrets for this action.
+- Push changes to `main` branch - the GHA will build the Next app and sync the `frontend/out` folder to the S3 bucket. Store the same access key and secret access key used for the profile above in Github secrets for this action.
 
 ##
 
