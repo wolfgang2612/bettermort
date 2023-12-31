@@ -11,7 +11,7 @@
 
   - > :warning: It is vital to create resources starting with the name 'bettermort' - the policies are granular to the extent of checking arnlike starting with 'bettermort'.
 
-  - Replace account_id with actual account ID.
+  - Replace account_id with AWS account ID.
 
 - Create access key for this user and store it in the `~/.aws/credentials` file under the appropriate profile name.
 
