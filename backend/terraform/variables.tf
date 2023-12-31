@@ -15,6 +15,8 @@ variable "websocket_routes" {
     {
       route_key     = "create_lobby"
       function_name = "create_lobby"
+      permissions   = ["dynamodb:GetItem", "dynamodb:PutItem"]
+      resources     = ["arn:aws:dynamodb:*:647256487653:table/bettermort*"]
     },
     {
       route_key     = "join_lobby"

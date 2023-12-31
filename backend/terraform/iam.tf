@@ -22,6 +22,23 @@ resource "aws_iam_role_policy_attachment" "lambda_execution_policy" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
+resource "aws_iam_role_policy" "lambda_extra_permissions" {
+  for_each = { for idx, value in var.websocket_routes : idx => value if contains(keys(value), "permissions") && contains(keys(value), "resources") }
+  name     = "bettermort_lambda_extra_permissions_${each.key}"
+  role     = aws_iam_role.lambda_role.name
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect   = "Allow",
+        Action   = each.value.permissions,
+        Resource = each.value.resources,
+      },
+    ],
+  })
+}
+
 data "aws_iam_policy_document" "apigateway_assume_role" {
   statement {
     effect = "Allow"

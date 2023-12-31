@@ -24,18 +24,14 @@
     {
       "Effect": "Allow",
       "Action": ["apigateway:DELETE"],
-      "Resource": [
-        "arn:aws:apigateway:*::/apis/*",
-        "arn:aws:apigateway:*::/apis/*/deployments/*"
-      ]
+      "Resource": ["arn:aws:apigateway:*::/apis/*"]
     },
     {
       "Effect": "Allow",
       "Action": ["apigateway:PATCH"],
       "Resource": [
         "arn:aws:apigateway:*::/apis/*",
-        "arn:aws:apigateway:*::/account",
-        "arn:aws:apigateway:*::/apis/*/stages/*"
+        "arn:aws:apigateway:*::/account"
       ]
     }
   ]
