@@ -6,17 +6,7 @@ from constants import DB, LOBBY
 client = boto3.client("dynamodb")
 
 
-def validate_inputs(lobby_code, player_name):
-    if lobby_code == "" or player_name == "":
-        return False
-
-    return True
-
-
-def register_player(lobby_code, player_name):
-    if not validate_inputs(lobby_code, player_name):
-        raise Exception("Invalid inputs.")
-
+def validate_lobby_exists(lobby_code):
     response = client.get_item(
         Key={
             "lobby_code": {
@@ -29,15 +19,39 @@ def register_player(lobby_code, player_name):
     if not "Item" in response:
         raise Exception("Lobby not found.")
 
+    return response
+
+
+def validate_inputs(lobby_code, player_name):
+    if lobby_code == "" or player_name == "":
+        raise Exception("Invalid inputs.")
+
+    return validate_lobby_exists(lobby_code)
+
+
+def register_player(args):
+    lobby_code = args["lobby_code"]
+    player_name = args["player_name"]
+
+    response = validate_inputs(lobby_code, player_name)
+
     player_list = []
     if "player_list" in response["Item"]:
-        player_list = response["Item"]["player_list"]["SS"]
+        player_list = response["Item"]["player_list"]["L"]
 
     if len(player_list) >= LOBBY.MAX_PLAYERS:
         raise Exception(f"A maximum of {LOBBY.MAX_PLAYERS} players are allowed.")
 
-    if not player_name in player_list:
-        player_list.append(player_name)
+    if not any(player["M"]["player"]["S"] == player_name for player in player_list):
+        player_list.append(
+            {
+                "M": {
+                    "player": {"S": player_name},
+                    "faction": {"S": ""},
+                    "role": {"S": ""},
+                }
+            }
+        )
 
         response = client.update_item(
             TableName=DB.DYNAMODB_TABLE_NAME,
@@ -47,13 +61,13 @@ def register_player(lobby_code, player_name):
                 }
             },
             UpdateExpression="set player_list = :player_list",
-            ExpressionAttributeValues={":player_list": {"SS": player_list}},
+            ExpressionAttributeValues={":player_list": {"L": player_list}},
         )
 
     else:
         raise Exception("Duplicate player name.")
 
-    return player_list
+    return [player["M"]["player"]["S"] for player in player_list]
 
 
 def handler(event, context):
@@ -65,7 +79,12 @@ def handler(event, context):
         lobby_code = body.get("lobby_code", "")
         player_name = body.get("player_name", "")
 
-        return_body["player_list"] = register_player(lobby_code, player_name)
+        return_body["player_list"] = register_player(
+            {
+                "lobby_code": lobby_code,
+                "player_name": player_name,
+            }
+        )
     except Exception as e:
         return_code = 500
         return_body = {"status": "error", "message": str(e)}

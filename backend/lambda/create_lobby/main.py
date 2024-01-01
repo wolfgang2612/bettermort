@@ -9,11 +9,10 @@ from constants import DB, LOBBY
 client = boto3.client("dynamodb")
 
 
-def create_lobby_code():
+def get_unique_code():
     retries = 0
-    max_retries = 10
     while True:
-        if retries >= max_retries:
+        if retries >= LOBBY.MAX_CODE_RETRIES:
             raise Exception("Unable to create unique lobby.")
 
         lobby_code = secrets.token_hex(LOBBY.LOBBY_CODE_NBYTES)
@@ -31,10 +30,31 @@ def create_lobby_code():
 
         retries += 1
 
+    return lobby_code
+
+
+def create_lobby_code(args):
+    lobby_leader = args["lobby_leader"]
+    lobby_code = get_unique_code()
+
     client.put_item(
         Item={
             "lobby_code": {
                 "S": lobby_code,
+            },
+            "player_list": {
+                "L": [
+                    {
+                        "M": {
+                            "player": {"S": lobby_leader},
+                            "role": {"S": ""},
+                            "faction": {"S": ""},
+                        }
+                    }
+                ]
+            },
+            "lobby_leader": {
+                "S": lobby_leader,
             },
             "time_to_live": {
                 "N": f"{int((datetime.now() + timedelta(days=DB.TTL_DAYS)).timestamp())}"
@@ -51,7 +71,10 @@ def handler(event, context):
     return_body = {"status": "success"}
 
     try:
-        return_body["lobby_code"] = create_lobby_code()
+        body = json.loads(event["body"])
+        lobby_leader = body.get("player_name", "")
+
+        return_body["lobby_code"] = create_lobby_code({"lobby_leader": lobby_leader})
     except Exception as e:
         return_code = 500
         return_body = {"status": "error", "message": str(e)}
