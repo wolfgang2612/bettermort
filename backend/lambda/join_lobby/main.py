@@ -1,7 +1,7 @@
 import json
 import boto3
 
-from constants import DB
+from constants import DB, LOBBY
 
 client = boto3.client("dynamodb")
 
@@ -32,6 +32,9 @@ def register_player(lobby_code, player_name):
     player_list = []
     if "player_list" in response["Item"]:
         player_list = response["Item"]["player_list"]["SS"]
+
+    if len(player_list) >= LOBBY.MAX_PLAYERS:
+        raise Exception(f"A maximum of {LOBBY.MAX_PLAYERS} players are allowed.")
 
     if not player_name in player_list:
         player_list.append(player_name)

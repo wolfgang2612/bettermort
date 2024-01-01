@@ -5,3 +5,5 @@ class DB:
 
 class LOBBY:
     LOBBY_CODE_NBYTES = 3
+    MIN_PLAYERS = 5
+    MAX_PLAYERS = 10

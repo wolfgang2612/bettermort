@@ -5,8 +5,9 @@ data "archive_file" "lambda_layer_file" {
 }
 
 resource "aws_lambda_layer_version" "lambda_layer" {
-  filename   = data.archive_file.lambda_layer_file.output_path
-  layer_name = "bettermort_lambda_layer"
+  filename         = data.archive_file.lambda_layer_file.output_path
+  layer_name       = "bettermort_lambda_layer"
+  source_code_hash = data.archive_file.lambda_layer_file.output_base64sha256
 
   compatible_runtimes = [var.python_runtime]
 }

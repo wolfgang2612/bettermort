@@ -2,20 +2,32 @@
   "Version": "2012-10-17",
   "Statement": [
     {
+      "Sid": "VisualEditor0",
       "Effect": "Allow",
       "Action": [
         "lambda:CreateFunction",
         "lambda:UpdateFunctionCode",
         "lambda:AddPermission",
+        "lambda:GetLayerVersion",
         "lambda:ListVersionsByFunction",
         "lambda:GetFunction",
+        "lambda:DeleteLayerVersion",
         "lambda:UpdateFunctionConfiguration",
         "lambda:DeleteFunction",
         "lambda:RemovePermission",
         "lambda:GetFunctionCodeSigningConfig",
         "lambda:GetPolicy"
       ],
-      "Resource": "arn:aws:lambda:*:{account_id}:function:bettermort*"
+      "Resource": [
+        "arn:aws:lambda:*:{account_id}:function:bettermort*",
+        "arn:aws:lambda:*:{account_id}:layer:bettermort*:*"
+      ]
+    },
+    {
+      "Sid": "VisualEditor1",
+      "Effect": "Allow",
+      "Action": "lambda:PublishLayerVersion",
+      "Resource": "arn:aws:lambda:*:{account_id}:layer:bettermort*"
     }
   ]
 }
