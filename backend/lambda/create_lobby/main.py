@@ -3,10 +3,8 @@ import json
 import boto3
 from datetime import datetime, timedelta
 
+from constants import DB, LOBBY
 
-table_name = "bettermort"
-lobby_code_nbytes = 3
-time_to_live_days = 1
 
 client = boto3.client("dynamodb")
 
@@ -18,14 +16,14 @@ def create_lobby_code():
         if retries >= max_retries:
             raise Exception("Unable to create unique lobby.")
 
-        lobby_code = secrets.token_hex(lobby_code_nbytes)
+        lobby_code = secrets.token_hex(LOBBY.LOBBY_CODE_NBYTES)
         response = client.get_item(
             Key={
                 "lobby_code": {
                     "S": lobby_code,
                 }
             },
-            TableName=table_name,
+            TableName=DB.DYNAMODB_TABLE_NAME,
         )
 
         if not "Item" in response:
@@ -39,10 +37,10 @@ def create_lobby_code():
                 "S": lobby_code,
             },
             "time_to_live": {
-                "N": f"{int((datetime.now() + timedelta(days=time_to_live_days)).timestamp())}"
+                "N": f"{int((datetime.now() + timedelta(days=DB.TTL_DAYS)).timestamp())}"
             },
         },
-        TableName=table_name,
+        TableName=DB.DYNAMODB_TABLE_NAME,
     )
 
     return lobby_code

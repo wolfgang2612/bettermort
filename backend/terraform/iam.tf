@@ -1,7 +1,12 @@
 resource "aws_iam_role" "lambda_role" {
   name_prefix        = "bettermort_lambda_role"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
+}
 
+resource "aws_iam_role" "lambda_custom_role" {
+  count              = length(var.websocket_custom_routes)
+  name_prefix        = "bettermort_${var.websocket_custom_routes[count.index].function_name}"
+  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
 }
 
 data "aws_iam_policy_document" "lambda_assume_role" {
@@ -22,18 +27,24 @@ resource "aws_iam_role_policy_attachment" "lambda_execution_policy" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
+resource "aws_iam_role_policy_attachment" "lambda_custom_execution_policy" {
+  count      = length(var.websocket_custom_routes)
+  role       = aws_iam_role.lambda_custom_role[count.index].name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
 resource "aws_iam_role_policy" "lambda_extra_permissions" {
-  for_each = { for idx, value in var.websocket_routes : idx => value if contains(keys(value), "permissions") && contains(keys(value), "resources") }
-  name     = "bettermort_lambda_extra_permissions_${each.key}"
-  role     = aws_iam_role.lambda_role.name
+  count = length(var.websocket_custom_routes)
+  name  = "bettermort_${var.websocket_custom_routes[count.index].function_name}_lambda_custom_permissions"
+  role  = aws_iam_role.lambda_custom_role[count.index].name
 
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
       {
         Effect   = "Allow",
-        Action   = each.value.permissions,
-        Resource = each.value.resources,
+        Action   = var.websocket_custom_routes[count.index].permissions,
+        Resource = var.websocket_custom_routes[count.index].resources,
       },
     ],
   })
