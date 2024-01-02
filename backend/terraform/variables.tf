@@ -30,6 +30,12 @@ variable "websocket_custom_routes" {
       resources     = ["arn:aws:dynamodb:*:647256487653:table/bettermort*"]
     },
     {
+      route_key     = "kick_player"
+      function_name = "kick_player"
+      permissions   = ["dynamodb:GetItem", "dynamodb:UpdateItem"]
+      resources     = ["arn:aws:dynamodb:*:647256487653:table/bettermort*"]
+    },
+    {
       route_key     = "get_state"
       function_name = "get_state"
       permissions   = ["dynamodb:GetItem"]

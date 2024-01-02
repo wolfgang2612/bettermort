@@ -35,6 +35,8 @@ def get_unique_code():
 
 def create_lobby_code(args):
     lobby_leader = args["lobby_leader"]
+    if not lobby_leader:
+        raise Exception("Player name empty.")
     lobby_code = get_unique_code()
 
     client.put_item(

@@ -2,24 +2,10 @@ import json
 import boto3
 
 from constants import DB, LOBBY
+from util.db import validate_lobby_exists
+from util.lobby import serialize_player_list
 
 client = boto3.client("dynamodb")
-
-
-def validate_lobby_exists(lobby_code):
-    response = client.get_item(
-        Key={
-            "lobby_code": {
-                "S": lobby_code,
-            }
-        },
-        TableName=DB.DYNAMODB_TABLE_NAME,
-    )
-
-    if not "Item" in response:
-        raise Exception("Lobby not found.")
-
-    return response
 
 
 def validate_inputs(lobby_code, player_name):
@@ -67,7 +53,7 @@ def register_player(args):
     else:
         raise Exception("Duplicate player name.")
 
-    return [player["M"]["player"]["S"] for player in player_list]
+    return serialize_player_list(player_list)
 
 
 def handler(event, context):
