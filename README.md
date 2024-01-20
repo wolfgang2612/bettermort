@@ -15,7 +15,14 @@
 
 - Create access key for this user and store it in the `~/.aws/credentials` file under the appropriate profile name.
 
-- Run terraform commands
+- Backend: run deploy script
+
+  ```
+  export AWS_PROFILE={aws_profile_name}
+  ./deploy.sh
+  ```
+
+- Frontend: run terraform commands
 
   ```
   export AWS_PROFILE={aws_profile_name}
