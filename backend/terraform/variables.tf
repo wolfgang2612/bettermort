@@ -46,7 +46,7 @@ variable "websocket_custom_routes" {
 
 variable "throttling_burst_limit" {
   type    = number
-  default = 5
+  default = 10
 }
 
 variable "throttling_rate_limit" {

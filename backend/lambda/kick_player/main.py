@@ -1,18 +1,20 @@
 import json
 import boto3
 
-from constants import DB
-from util.db import validate_lobby_exists
-from util.lobby import serialize_player_list
+from constants import DB_CONSTANTS
+from util.lobby import LOBBY_UTIL
+from util.params import PARAMS_UTIL
 
 client = boto3.client("dynamodb")
 
 
 def kick_player(args):
+    PARAMS_UTIL.validate_inputs(args)
+
     lobby_code = args["lobby_code"]
     player_to_kick = args["player_to_kick"]
 
-    response = validate_lobby_exists(lobby_code)
+    response = LOBBY_UTIL.get_lobby_data(lobby_code)
 
     player_list = response["Item"]["player_list"]["L"]
 
@@ -20,7 +22,7 @@ def kick_player(args):
         (
             index
             for index, item in enumerate(player_list)
-            if item["M"]["player"]["S"] == player_to_kick
+            if item.get("M", {}).get("player", {}).get("S") == player_to_kick
         ),
         None,
     )
@@ -30,8 +32,8 @@ def kick_player(args):
 
     player_list.pop(player_index)
 
-    response = client.update_item(
-        TableName=DB.DYNAMODB_TABLE_NAME,
+    client.update_item(
+        TableName=DB_CONSTANTS.DYNAMODB_TABLE_NAME,
         Key={
             "lobby_code": {
                 "S": lobby_code,
@@ -41,7 +43,7 @@ def kick_player(args):
         ExpressionAttributeValues={":player_list": {"L": player_list}},
     )
 
-    return serialize_player_list(player_list)
+    return PARAMS_UTIL.serialize_player_list(player_list)
 
 
 def handler(event, context):
